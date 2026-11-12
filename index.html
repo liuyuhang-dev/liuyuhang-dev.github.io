@@ -10,7 +10,7 @@
 <body>
 
 <header class="topbar">
-  <a class="brand" href="#top">刘禹杭<span class="dot">·</span><span class="brand-sub">AI 质量与交付</span></a>
+  <a class="brand" href="#top">刘禹杭<span class="dot">/</span><span class="brand-sub">AI 质量与交付</span></a>
   <nav>
     <a href="#work">作品</a>
     <a href="#method">方法</a>
@@ -19,170 +19,213 @@
   </nav>
 </header>
 
-<main id="top">
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">2026 作品集 · AI QUALITY &amp; DELIVERY</p>
+      <h1>把 AI 生成的内容，<br>变成<span class="hl">可验收</span>的产品。</h1>
+      <p class="lede">
+        5 年游戏研发与质量经验，3 年跨职能项目管理。
+        做过从 0 到 1 的 AI 研发管理体系、可复现的测试基线，
+        以及把重复劳动变成系统的几套工具。
+      </p>
+      <div class="hero-actions">
+        <a class="btn" href="#work">看作品</a>
+        <a class="btn btn-ghost" href="#writing">读文章</a>
+      </div>
+    </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <p class="eyebrow">2026 · 作品集</p>
-    <h1>
-      把 AI 生成的内容，<br>
-      变成<span class="hl">可验收、可发布</span>的产品。
-    </h1>
-    <p class="lede">
-      5 年游戏研发与质量经验，3 年跨职能项目管理。
-      做过从 0 到 1 的 AI 研发项目管理体系、可复现的测试基线，
-      以及把重复劳动变成系统的几套工具。
-    </p>
-    <div class="hero-actions">
-      <a class="btn" href="#work">看作品</a>
-      <a class="btn btn-ghost" href="#writing">读文章</a>
+    <figure class="hero-figure" aria-label="完备性矩阵示意">
+      <svg viewBox="0 0 400 215" role="img" aria-label="完备性矩阵：没有空格子">
+        <g class="cells"></g>
+      </svg>
+      <figcaption>
+        <span class="fig-num">72 格</span>
+        <span>适用 41 · 不适用 31 · <strong>未判断 0</strong></span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="wrap">
+  <section class="stats" aria-label="关键数字">
+    <div class="stat stat-hi">
+      <span class="s-num">1200<span class="plus">+</span></span>
+      <span class="s-lbl">知识节点<br>735 个甘特节点</span>
+    </div>
+    <div class="stat">
+      <span class="s-num">17</span>
+      <span class="s-lbl">类测试维度<br>含 5 类事故后补</span>
+    </div>
+    <div class="stat">
+      <span class="s-num">18</span>
+      <span class="s-lbl">项提测前<br>已知问题</span>
+    </div>
+    <div class="stat">
+      <span class="s-num">290<span class="plus">+</span></span>
+      <span class="s-lbl">条版本用例<br>执行率 ≥ 90%</span>
+    </div>
+    <div class="stat">
+      <span class="s-num">10</span>
+      <span class="s-lbl">个交付目录<br>人工提交 → 自动</span>
     </div>
   </section>
+</div>
 
-  <!-- METRICS -->
-  <section class="metrics" aria-label="关键数字">
-    <div class="metric"><span class="num">3</span><span class="lbl">个项目 · 从立项到上线</span></div>
-    <div class="metric"><span class="num">30</span><span class="lbl">人跨职能团队</span></div>
-    <div class="metric"><span class="num">1200+</span><span class="lbl">知识节点 · 735 甘特节点</span></div>
-    <div class="metric"><span class="num">12</span><span class="lbl">类测试维度 · 可复现基线</span></div>
-    <div class="metric"><span class="num">18</span><span class="lbl">项提测前已知问题</span></div>
-    <div class="metric"><span class="num">10</span><span class="lbl">个交付监控目录自动化</span></div>
-  </section>
-
-  <!-- WORK -->
+<!-- WORK -->
+<div class="wrap">
   <section id="work" class="section">
     <div class="section-head">
       <span class="idx">01</span>
       <h2>作品</h2>
-      <p class="section-sub">三个案例，都按「问题 → 约束 → 设计 → 结果」写。不写职责，写机制。</p>
+      <p class="section-sub">四个案例，都按「问题 → 设计 → 结果」写。不写职责，写机制。</p>
     </div>
 
     <article class="case">
-      <div class="case-meta">
-        <span class="tag">AI 研发项目 · 0→1</span>
-        <span class="year">2026</span>
+      <div class="case-copy">
+        <div class="case-meta"><span class="tag">AI 研发项目 · 0→1</span><span class="year">2026</span></div>
+        <h3>让每个节点都有证据</h3>
+        <p class="case-problem">十人并行、上百个页面，没人说得清进度；AI 生成快，但产出没人敢签收。</p>
+        <ul class="pts">
+          <li><strong>四层拆解</strong>：版本 → 功能 → 工序链 → 承担人</li>
+          <li><strong>AI 只提议</strong>，人确认才落库——治理边界写进流程</li>
+          <li>每个节点挂 Git 提交作为证据，逾期可视化</li>
+        </ul>
+        <p class="case-line">从「没人说得清进度」到「每个节点都有证据」。</p>
       </div>
-      <h3>让每个节点都有证据：AI 项目的进度与验收体系</h3>
-      <p class="case-problem">
-        <strong>问题</strong>　十人并行、上百个页面，没人说得清进度；AI 生成快，但产出没人敢签收。
-      </p>
-      <div class="case-grid">
-        <div>
-          <h4>设计</h4>
-          <ul>
-            <li>把策划文档拆成「版本 → 功能 → 工序链 → 承担人」四层</li>
-            <li><strong>AI 只提议，人确认才落库</strong>——治理边界写在流程里</li>
-            <li>每个节点挂 Git 提交作为实现证据，逾期可视化</li>
-            <li>从缺陷反推 12 类测试维度、9 条跨模块规则前置拦截</li>
-          </ul>
-        </div>
-        <div>
-          <h4>结果</h4>
-          <ul>
-            <li>1200+ 知识节点、735 个甘特节点，132 完成 / 87 逾期逐条可核对</li>
-            <li>提测前静态走查输出 18 项已知问题，减少提测后返工</li>
-            <li>测试结论可复现：源码 HEAD + 产物 sha256 + 配置快照 + 页面矩阵</li>
-          </ul>
-        </div>
-      </div>
-      <p class="case-line">从「没人说得清进度」到「每个节点都有证据」。</p>
+      <figure class="case-fig">
+        <svg viewBox="0 0 460 250" role="img" aria-label="四层拆解结构图">
+          <g class="dg">
+            <rect x="6" y="10" width="100" height="44" rx="3"/>
+            <text x="56" y="38">版本</text>
+            <rect x="122" y="10" width="100" height="44" rx="3"/>
+            <text x="172" y="38">功能</text>
+            <rect x="238" y="10" width="100" height="44" rx="3"/>
+            <text x="288" y="38">工序链</text>
+            <rect x="354" y="10" width="100" height="44" rx="3"/>
+            <text x="404" y="38">承担人</text>
+            <path d="M106 32 h14 M222 32 h14 M338 32 h14" class="arw"/>
+            <rect x="6" y="98" width="146" height="36" rx="3" class="soft"/>
+            <text x="79" y="121" class="sm">里程碑</text>
+            <rect x="160" y="98" width="146" height="36" rx="3" class="soft"/>
+            <text x="233" y="121" class="sm">验收标准</text>
+            <rect x="314" y="98" width="140" height="36" rx="3" class="soft"/>
+            <text x="384" y="121" class="sm">我的任务</text>
+            <path d="M56 54 v44 M172 54 v44 M288 54 v44" class="arw-d"/>
+            <rect x="6" y="168" width="448" height="46" rx="3" class="gate"/>
+            <text x="230" y="196" class="gate-t">人工闸门：AI 提议 · 人签字</text>
+          </g>
+        </svg>
+        <figcaption>四层拆解 + 一道人工闸门</figcaption>
+      </figure>
     </article>
 
     <article class="case">
-      <div class="case-meta">
-        <span class="tag">质量体系 · 评测基线</span>
-        <span class="year">2026</span>
+      <div class="case-copy">
+        <div class="case-meta"><span class="tag">质量体系 · 评测基线</span><span class="year">2026</span></div>
+        <h3>让报告不说谎</h3>
+        <p class="case-problem">让 AI 既玩游戏又判对错，等于自己出题自己判卷——它不会报错，它会把 bug 固化成预期。</p>
+        <ul class="pts">
+          <li><strong>玩判分离</strong>：执行与判定不能是同一主体</li>
+          <li><strong>期望不来自观察</strong>：只来自需求 / 不变量 / 配置 / 源间一致</li>
+          <li><strong>没证据不判通过</strong>：能力缺失记 blocked</li>
+        </ul>
+        <p class="case-line">宁可要「30 通过 / 20 blocked / 5 人工」的诚实报告。</p>
       </div>
-      <h3>让报告不说谎：玩判分离与可复现基线</h3>
-      <p class="case-problem">
-        <strong>问题</strong>　让 AI 既玩游戏又判对错，等于自己出题自己判卷——它不会报错，它会把 bug 固化成预期。
-      </p>
-      <div class="case-grid">
-        <div>
-          <h4>三条规矩</h4>
-          <ul>
-            <li><strong>玩判分离</strong>：执行的和判定的不能是同一个主体</li>
-            <li><strong>期望不来自观察</strong>：只能来自需求 / 不变量 / 配置 / 源间一致性</li>
-            <li><strong>没证据不判通过</strong>：能力缺失记 blocked，不许记 pass</li>
-          </ul>
-        </div>
-        <div>
-          <h4>结果</h4>
-          <ul>
-            <li>8 条核心链路 7 条可自动跑通，单条 34–100 秒</li>
-            <li>门禁用<strong>执行率 ≥ 90%</strong>，不用通过率——通过率可以靠少跑刷出来</li>
-            <li>290+ 条活动用例、200+ 条线上反馈跟进</li>
-          </ul>
-        </div>
-      </div>
-      <p class="case-line">宁可要一份「30 通过 / 20 blocked / 5 人工」的诚实报告，也不要「55 全绿」的假报告。</p>
+      <figure class="case-fig">
+        <svg viewBox="0 0 460 250" role="img" aria-label="玩与判分离示意">
+          <g class="dg">
+            <rect x="6" y="12" width="448" height="66" rx="3" class="lane"/>
+            <text x="26" y="54" class="lane-t">玩</text>
+            <text x="66" y="54" class="lane-s">脚本 / AI / 人</text>
+            <rect x="6" y="94" width="448" height="66" rx="3" class="lane lane-2"/>
+            <text x="26" y="136" class="lane-t">判</text>
+            <text x="66" y="136" class="lane-s">需求 / 不变量 / 配置 / 源对</text>
+            <path d="M230 78 v16" class="cut"/>
+            <text x="242" y="92" class="cut-t">两条线不得共用</text>
+            <line x1="6" y1="186" x2="454" y2="186" class="hr"/>
+            <text x="6" y="214" class="xs">三道闸门</text>
+            <text x="86" y="210" class="chip">需求覆盖</text>
+            <text x="186" y="210" class="chip">期望溯源</text>
+            <text x="286" y="210" class="chip">执行率 ≥ 90%</text>
+          </g>
+        </svg>
+        <figcaption>执行与判定分离 + 三道强制校验</figcaption>
+      </figure>
     </article>
 
     <article class="case">
-      <div class="case-meta">
-        <span class="tag">工具化 · 自动化</span>
-        <span class="year">2025–2026</span>
+      <div class="case-copy">
+        <div class="case-meta"><span class="tag">工具化 · 自动化</span><span class="year">2025–2026</span></div>
+        <h3>把协议藏进目录结构</h3>
+        <p class="case-problem">美术走 SVN 交付，靠口头通知 + 人工提交：漏交没人发现、同名互相覆盖、半截文件被提交。</p>
+        <ul class="pts">
+          <li>美术只需把文件<strong>拖进一个文件夹</strong>，其余全自动</li>
+          <li>文件名即数据结构：<code>单号_资源名_用途.png</code></li>
+          <li><strong>传完判定</strong>：大小与时间连续多轮不变才收</li>
+        </ul>
+        <p class="case-line">核心不是 SVN，是把协议藏进目录结构里。</p>
       </div>
-      <h3>把协议藏进目录结构：美术交付自动化</h3>
-      <p class="case-problem">
-        <strong>问题</strong>　美术走 SVN 交付，靠口头通知 + 人工提交：漏交没人发现、同名互相覆盖、半截文件被提交、出了问题查不到是谁哪次交的。
-      </p>
-      <div class="case-grid">
-        <div>
-          <h4>设计</h4>
-          <ul>
-            <li>只写投递口：美术只需把文件拖进一个文件夹</li>
-            <li>文件名即数据结构：<code>单号_资源名_用途.ext</code></li>
-            <li>传完判定：大小 + 修改时间连续多轮不变才收，消灭半截文件</li>
-            <li>失败进 5 分钟退避队列，状态落盘，重启继续</li>
-          </ul>
-        </div>
-        <div>
-          <h4>结果</h4>
-          <ul>
-            <li>覆盖 10 个交付监控目录，人工提交变为自动同步</li>
-            <li>漏交、重复提交、同名覆盖需人工追查的情况基本消失</li>
-            <li>每次交付有台账：时间 / 来源 / 单号 / 归档路径 / 版本 / 结果</li>
-          </ul>
-        </div>
-      </div>
-      <p class="case-line">核心不是 SVN，是把协议藏进目录结构里。</p>
+      <figure class="case-fig">
+        <svg viewBox="0 0 460 250" role="img" aria-label="交付流水线示意">
+          <g class="dg">
+            <rect x="6" y="24" width="104" height="66" rx="3" class="soft"/>
+            <text x="58" y="54" class="sm">收件箱</text>
+            <text x="58" y="76" class="xs" text-anchor="middle">只写</text>
+            <rect x="128" y="24" width="104" height="66" rx="3" class="soft"/>
+            <text x="180" y="54" class="sm">命名校验</text>
+            <text x="180" y="76" class="xs" text-anchor="middle">解析单号</text>
+            <rect x="250" y="24" width="104" height="66" rx="3" class="soft"/>
+            <text x="302" y="54" class="sm">传完判定</text>
+            <text x="302" y="76" class="xs" text-anchor="middle">稳定 2–3 轮</text>
+            <rect x="350" y="140" width="104" height="66" rx="3" class="soft"/>
+            <text x="402" y="170" class="sm">自动提交</text>
+            <text x="402" y="192" class="xs" text-anchor="middle">带工单号</text>
+            <path d="M110 57 h14 M232 57 h14 M354 57 h14 v79" class="arw"/>
+            <rect x="6" y="140" width="128" height="66" rx="3" class="warn"/>
+            <text x="70" y="170" class="sm">待修改</text>
+            <text x="70" y="192" class="xs" text-anchor="middle">附说明退回</text>
+            <path d="M180 90 v96 h-46" class="arw-w"/>
+          </g>
+        </svg>
+        <figcaption>一个投递口，五种自动处理</figcaption>
+      </figure>
     </article>
 
     <article class="case">
-      <div class="case-meta">
-        <span class="tag">质量体系 · 完备性</span>
-        <span class="year">2026</span>
+      <div class="case-copy">
+        <div class="case-meta"><span class="tag">质量体系 · 完备性</span><span class="year">2026</span></div>
+        <h3>让漏测无处可藏</h3>
+        <p class="case-problem">靠「想」一定漏。人的注意力顺着正常流程走，而边界、重复、中断、竞态跟正常流程正交。</p>
+        <ul class="pts">
+          <li>每条需求子句 × 每个维度 = 一个格子</li>
+          <li>格子只有三态：<strong>适用</strong>给产出 / <strong>不适用</strong>给理由 / <strong>未判断</strong>不允许</li>
+          <li>第二张表：21 条需求没写、但必须成立的常识</li>
+        </ul>
+        <p class="case-line">完备性是乘出来的，不是想出来的。</p>
       </div>
-      <h3>让漏测无处可藏：测试维度完备性矩阵</h3>
-      <p class="case-problem">
-        <strong>问题</strong>　靠「想」一定漏。人的注意力是顺着正常流程走的，而边界、重复、中断、竞态跟正常流程正交——不在你思路的延长线上。
-      </p>
-      <div class="case-grid">
-        <div>
-          <h4>设计</h4>
-          <ul>
-            <li>每条需求子句 × 12 个维度 = 一个格子</li>
-            <li>格子只有三态：<strong>适用</strong>必须给产出，<strong>不适用</strong>必须给理由，<strong>未判断</strong>不允许存在</li>
-            <li>第二张表：21 条需求没写、但必须成立的常识不变量</li>
-            <li>出了新类型缺陷就回补一个维度，重跑矩阵自动标出新格子</li>
-          </ul>
-        </div>
-        <div>
-          <h4>结果</h4>
-          <ul>
-            <li>3 条子句 → 36 格，全部填完，空格子数得出来</li>
-            <li>策划能数格子，比「覆盖率 92%」可信得多</li>
-            <li>从 12 类基础维度扩到 20 类，靠事故驱动而非记忆力</li>
-          </ul>
-        </div>
-      </div>
-      <p class="case-line">完备性是乘出来的，不是想出来的。</p>
+      <figure class="case-fig">
+        <svg viewBox="0 0 460 250" role="img" aria-label="17 类测试维度">
+          <g class="dg">
+            <text x="6" y="22" class="xs">D1–D12 基础维度（功能）</text>
+            <g class="dims"></g>
+            <text x="6" y="132" class="xs">D13–D17 事故后补（非功能）</text>
+            <g class="dims2"></g>
+            <line x1="6" y1="196" x2="454" y2="196" class="hr"/>
+            <text x="6" y="224" class="xs2">脚本是被扩充的对象，不是扩充者</text>
+          </g>
+        </svg>
+        <figcaption>12 类基础 + 5 类补强 = 17</figcaption>
+      </figure>
     </article>
   </section>
+</div>
 
-  <!-- METHOD -->
-  <section id="method" class="section section-dark">
+<!-- METHOD -->
+<section id="method" class="section section-dark">
+  <div class="wrap">
     <div class="section-head">
       <span class="idx">02</span>
       <h2>方法</h2>
@@ -192,22 +235,24 @@
       <div class="rule">
         <span class="rule-no">01</span>
         <h3>生成越便宜，判断越贵</h3>
-        <p>AI 压缩的是「做出来」的成本，没有压缩「证明它是对的」的成本。所以站位应该选在判断和放行那一侧。</p>
+        <p>AI 压缩的是「做出来」的成本，没有压缩「证明它是对的」的成本。站位应该选在判断和放行那一侧。</p>
       </div>
       <div class="rule">
         <span class="rule-no">02</span>
         <h3>能被执行的思想才是资产</h3>
-        <p>「我重视质量」没有价值。有价值的是能跑的检查脚本、一张门禁表、一套判定词表。方法论必须落到可执行。</p>
+        <p>「我重视质量」没有价值。有价值的是能跑的检查脚本、一张门禁表、一套判定词表。</p>
       </div>
       <div class="rule">
         <span class="rule-no">03</span>
         <h3>诚实的边界比全能可信</h3>
-        <p>判不了的说判不了、没证据的说没证据、没跑的说没跑。报告的代价是会显得「不够绿」，但那是真实状态。</p>
+        <p>判不了的说判不了、没证据的说没证据。报告的代价是会显得「不够绿」，但那是真实状态。</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- WRITING -->
+<!-- WRITING -->
+<div class="wrap">
   <section id="writing" class="section">
     <div class="section-head">
       <span class="idx">03</span>
@@ -216,24 +261,23 @@
     </div>
     <div class="writing-list">
       <a class="writing-item" href="writing/play-judge.html">
-        <span class="w-date">2026</span>
-        <span class="w-title">AI 测试的「玩判分离」：为什么不能让同一个 AI 既玩游戏又判对错</span>
+        <span class="w-no">01</span>
+        <span class="w-title">AI 测试的「玩判分离」<em>为什么不能让同一个 AI 既玩游戏又判对错</em></span>
         <span class="w-arrow">→</span>
       </a>
       <a class="writing-item" href="writing/acceptance-bottleneck.html">
-        <span class="w-date">2026</span>
-        <span class="w-title">当 AI 能写代码，验收才是瓶颈</span>
+        <span class="w-no">02</span>
+        <span class="w-title">当 AI 能写代码，验收才是瓶颈<em>生成变便宜之后，最贵的一环</em></span>
         <span class="w-arrow">→</span>
       </a>
       <a class="writing-item" href="writing/why-testing.html">
-        <span class="w-date">2026</span>
-        <span class="w-title">要测试干嘛？</span>
+        <span class="w-no">03</span>
+        <span class="w-title">要测试干嘛？<em>三个尖锐质疑，和我的回答</em></span>
         <span class="w-arrow">→</span>
       </a>
     </div>
   </section>
 
-  <!-- ABOUT -->
   <section id="about" class="section section-about">
     <div class="section-head">
       <span class="idx">04</span>
@@ -246,7 +290,7 @@
           <strong>当 AI 参与生产，怎么证明产出是可以上线的。</strong>
         </p>
         <p>
-          做过测试负责人，也做过项目经理。带过 2 人测试小组、统筹 30 人跨职能团队；
+          做过测试负责人，也做过项目经理。带过测试小组、统筹 30 人跨职能团队；
           管过外包、预算、双端发版和热更；也自己写 PowerShell 和 Python，
           把重复的交付动作变成系统。
         </p>
@@ -271,12 +315,54 @@
       </div>
     </div>
   </section>
-
-</main>
+</div>
 
 <footer>
-  <p>© 2026 刘禹杭 · 本页内容均为个人方法论与脱敏后的设计描述，不含任何雇主的源代码、需求文档或用户数据。</p>
+  <p>© 2026 刘禹杭 · 本页内容为个人方法论与脱敏后的设计描述，不含任何雇主的源代码、需求文档或用户数据。</p>
 </footer>
+
+<script>
+(function(){
+  var g = document.querySelector('.cells');
+  if(!g) return;
+  var cols=12, rows=6, s=24, gap=5, ox=18, oy=12;
+  var na = new Set([3,9,14,19,25,32,37,41,48,55,60,66]);
+  for(var i=0;i<cols*rows;i++){
+    var c=i%cols, r=Math.floor(i/cols);
+    var rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', ox + c*(s+gap));
+    rect.setAttribute('y', oy + r*(s+gap));
+    rect.setAttribute('width', s); rect.setAttribute('height', s);
+    rect.setAttribute('rx', 2);
+    if(na.has(i)){ rect.setAttribute('fill','none'); rect.setAttribute('stroke','#5c5850'); rect.setAttribute('stroke-width','1.3'); }
+    else { rect.setAttribute('fill','#7fd1ae'); }
+    g.appendChild(rect);
+  }
+})();
+
+(function(){
+  var a=document.querySelector('.dims'), b=document.querySelector('.dims2');
+  if(!a||!b) return;
+  function cell(g, x, y, w, h, fill, label, dark){
+    var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',x); r.setAttribute('y',y); r.setAttribute('width',w); r.setAttribute('height',h);
+    r.setAttribute('rx',2); r.setAttribute('fill',fill);
+    g.appendChild(r);
+    if(label){
+      var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x', x+w/2); t.setAttribute('y', y+h/2+4);
+      t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','11');
+      t.setAttribute('fill', dark ? '#4a463c' : '#0d3b2c');
+      t.setAttribute('font-family','ui-monospace,Menlo,Consolas,monospace');
+      t.textContent = label;
+      g.appendChild(t);
+    }
+  }
+  var w=34, gap=3, x0=6;
+  for(var i=0;i<12;i++){ cell(a, x0+i*(w+gap), 34, w, 40, '#d8d1bf', 'D'+(i+1), true); }
+  for(var j=0;j<5;j++){ cell(b, x0+j*(w+gap), 144, w, 40, '#7fd1ae', 'D'+(13+j), false); }
+})();
+</script>
 
 </body>
 </html>
