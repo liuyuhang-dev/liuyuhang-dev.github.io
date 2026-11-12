@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刘禹杭 · AI 质量与交付</title>
+<meta name="description" content="把 AI 生成的内容，变成可验收、可发布的产品。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#top">刘禹杭<span class="dot">·</span><span class="brand-sub">AI 质量与交付</span></a>
+  <nav>
+    <a href="#work">作品</a>
+    <a href="#method">方法</a>
+    <a href="#writing">文章</a>
+    <a href="#about">关于</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="eyebrow">2026 · 作品集</p>
+    <h1>
+      把 AI 生成的内容，<br>
+      变成<span class="hl">可验收、可发布</span>的产品。
+    </h1>
+    <p class="lede">
+      5 年游戏研发与质量经验，3 年跨职能项目管理。
+      做过从 0 到 1 的 AI 研发项目管理体系、可复现的测试基线，
+      以及把重复劳动变成系统的几套工具。
+    </p>
+    <div class="hero-actions">
+      <a class="btn" href="#work">看作品</a>
+      <a class="btn btn-ghost" href="#writing">读文章</a>
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <section class="metrics" aria-label="关键数字">
+    <div class="metric"><span class="num">3</span><span class="lbl">个项目 · 从立项到上线</span></div>
+    <div class="metric"><span class="num">30</span><span class="lbl">人跨职能团队</span></div>
+    <div class="metric"><span class="num">1200+</span><span class="lbl">知识节点 · 735 甘特节点</span></div>
+    <div class="metric"><span class="num">12</span><span class="lbl">类测试维度 · 可复现基线</span></div>
+    <div class="metric"><span class="num">18</span><span class="lbl">项提测前已知问题</span></div>
+    <div class="metric"><span class="num">10</span><span class="lbl">个交付监控目录自动化</span></div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="section">
+    <div class="section-head">
+      <span class="idx">01</span>
+      <h2>作品</h2>
+      <p class="section-sub">三个案例，都按「问题 → 约束 → 设计 → 结果」写。不写职责，写机制。</p>
+    </div>
+
+    <article class="case">
+      <div class="case-meta">
+        <span class="tag">AI 研发项目 · 0→1</span>
+        <span class="year">2026</span>
+      </div>
+      <h3>让每个节点都有证据：AI 项目的进度与验收体系</h3>
+      <p class="case-problem">
+        <strong>问题</strong>　十人并行、上百个页面，没人说得清进度；AI 生成快，但产出没人敢签收。
+      </p>
+      <div class="case-grid">
+        <div>
+          <h4>设计</h4>
+          <ul>
+            <li>把策划文档拆成「版本 → 功能 → 工序链 → 承担人」四层</li>
+            <li><strong>AI 只提议，人确认才落库</strong>——治理边界写在流程里</li>
+            <li>每个节点挂 Git 提交作为实现证据，逾期可视化</li>
+            <li>从缺陷反推 12 类测试维度、9 条跨模块规则前置拦截</li>
+          </ul>
+        </div>
+        <div>
+          <h4>结果</h4>
+          <ul>
+            <li>1200+ 知识节点、735 个甘特节点，132 完成 / 87 逾期逐条可核对</li>
+            <li>提测前静态走查输出 18 项已知问题，减少提测后返工</li>
+            <li>测试结论可复现：源码 HEAD + 产物 sha256 + 配置快照 + 页面矩阵</li>
+          </ul>
+        </div>
+      </div>
+      <p class="case-line">从「没人说得清进度」到「每个节点都有证据」。</p>
+    </article>
+
+    <article class="case">
+      <div class="case-meta">
+        <span class="tag">质量体系 · 评测基线</span>
+        <span class="year">2026</span>
+      </div>
+      <h3>让报告不说谎：玩判分离与可复现基线</h3>
+      <p class="case-problem">
+        <strong>问题</strong>　让 AI 既玩游戏又判对错，等于自己出题自己判卷——它不会报错，它会把 bug 固化成预期。
+      </p>
+      <div class="case-grid">
+        <div>
+          <h4>三条规矩</h4>
+          <ul>
+            <li><strong>玩判分离</strong>：执行的和判定的不能是同一个主体</li>
+            <li><strong>期望不来自观察</strong>：只能来自需求 / 不变量 / 配置 / 源间一致性</li>
+            <li><strong>没证据不判通过</strong>：能力缺失记 blocked，不许记 pass</li>
+          </ul>
+        </div>
+        <div>
+          <h4>结果</h4>
+          <ul>
+            <li>8 条核心链路 7 条可自动跑通，单条 34–100 秒</li>
+            <li>门禁用<strong>执行率 ≥ 90%</strong>，不用通过率——通过率可以靠少跑刷出来</li>
+            <li>290+ 条活动用例、200+ 条线上反馈跟进</li>
+          </ul>
+        </div>
+      </div>
+      <p class="case-line">宁可要一份「30 通过 / 20 blocked / 5 人工」的诚实报告，也不要「55 全绿」的假报告。</p>
+    </article>
+
+    <article class="case">
+      <div class="case-meta">
+        <span class="tag">工具化 · 自动化</span>
+        <span class="year">2025–2026</span>
+      </div>
+      <h3>把协议藏进目录结构：美术交付自动化</h3>
+      <p class="case-problem">
+        <strong>问题</strong>　美术走 SVN 交付，靠口头通知 + 人工提交：漏交没人发现、同名互相覆盖、半截文件被提交、出了问题查不到是谁哪次交的。
+      </p>
+      <div class="case-grid">
+        <div>
+          <h4>设计</h4>
+          <ul>
+            <li>只写投递口：美术只需把文件拖进一个文件夹</li>
+            <li>文件名即数据结构：<code>单号_资源名_用途.ext</code></li>
+            <li>传完判定：大小 + 修改时间连续多轮不变才收，消灭半截文件</li>
+            <li>失败进 5 分钟退避队列，状态落盘，重启继续</li>
+          </ul>
+        </div>
+        <div>
+          <h4>结果</h4>
+          <ul>
+            <li>覆盖 10 个交付监控目录，人工提交变为自动同步</li>
+            <li>漏交、重复提交、同名覆盖需人工追查的情况基本消失</li>
+            <li>每次交付有台账：时间 / 来源 / 单号 / 归档路径 / 版本 / 结果</li>
+          </ul>
+        </div>
+      </div>
+      <p class="case-line">核心不是 SVN，是把协议藏进目录结构里。</p>
+    </article>
+
+    <article class="case">
+      <div class="case-meta">
+        <span class="tag">质量体系 · 完备性</span>
+        <span class="year">2026</span>
+      </div>
+      <h3>让漏测无处可藏：测试维度完备性矩阵</h3>
+      <p class="case-problem">
+        <strong>问题</strong>　靠「想」一定漏。人的注意力是顺着正常流程走的，而边界、重复、中断、竞态跟正常流程正交——不在你思路的延长线上。
+      </p>
+      <div class="case-grid">
+        <div>
+          <h4>设计</h4>
+          <ul>
+            <li>每条需求子句 × 12 个维度 = 一个格子</li>
+            <li>格子只有三态：<strong>适用</strong>必须给产出，<strong>不适用</strong>必须给理由，<strong>未判断</strong>不允许存在</li>
+            <li>第二张表：21 条需求没写、但必须成立的常识不变量</li>
+            <li>出了新类型缺陷就回补一个维度，重跑矩阵自动标出新格子</li>
+          </ul>
+        </div>
+        <div>
+          <h4>结果</h4>
+          <ul>
+            <li>3 条子句 → 36 格，全部填完，空格子数得出来</li>
+            <li>策划能数格子，比「覆盖率 92%」可信得多</li>
+            <li>从 12 类基础维度扩到 20 类，靠事故驱动而非记忆力</li>
+          </ul>
+        </div>
+      </div>
+      <p class="case-line">完备性是乘出来的，不是想出来的。</p>
+    </article>
+  </section>
+
+  <!-- METHOD -->
+  <section id="method" class="section section-dark">
+    <div class="section-head">
+      <span class="idx">02</span>
+      <h2>方法</h2>
+      <p class="section-sub">三句可以拿去反驳我的话。</p>
+    </div>
+    <div class="rules">
+      <div class="rule">
+        <span class="rule-no">01</span>
+        <h3>生成越便宜，判断越贵</h3>
+        <p>AI 压缩的是「做出来」的成本，没有压缩「证明它是对的」的成本。所以站位应该选在判断和放行那一侧。</p>
+      </div>
+      <div class="rule">
+        <span class="rule-no">02</span>
+        <h3>能被执行的思想才是资产</h3>
+        <p>「我重视质量」没有价值。有价值的是能跑的检查脚本、一张门禁表、一套判定词表。方法论必须落到可执行。</p>
+      </div>
+      <div class="rule">
+        <span class="rule-no">03</span>
+        <h3>诚实的边界比全能可信</h3>
+        <p>判不了的说判不了、没证据的说没证据、没跑的说没跑。报告的代价是会显得「不够绿」，但那是真实状态。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section id="writing" class="section">
+    <div class="section-head">
+      <span class="idx">03</span>
+      <h2>文章</h2>
+      <p class="section-sub">把踩过的坑写下来，比讲十个道理有用。</p>
+    </div>
+    <div class="writing-list">
+      <a class="writing-item" href="writing/play-judge.html">
+        <span class="w-date">2026</span>
+        <span class="w-title">AI 测试的「玩判分离」：为什么不能让同一个 AI 既玩游戏又判对错</span>
+        <span class="w-arrow">→</span>
+      </a>
+      <a class="writing-item" href="writing/acceptance-bottleneck.html">
+        <span class="w-date">2026</span>
+        <span class="w-title">当 AI 能写代码，验收才是瓶颈</span>
+        <span class="w-arrow">→</span>
+      </a>
+      <a class="writing-item" href="writing/why-testing.html">
+        <span class="w-date">2026</span>
+        <span class="w-title">要测试干嘛？</span>
+        <span class="w-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section section-about">
+    <div class="section-head">
+      <span class="idx">04</span>
+      <h2>关于</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p class="about-lead">
+          我是刘禹杭。过去五年在游戏行业做质量与交付，最近一年主要在回答一个问题：
+          <strong>当 AI 参与生产，怎么证明产出是可以上线的。</strong>
+        </p>
+        <p>
+          做过测试负责人，也做过项目经理。带过 2 人测试小组、统筹 30 人跨职能团队；
+          管过外包、预算、双端发版和热更；也自己写 PowerShell 和 Python，
+          把重复的交付动作变成系统。
+        </p>
+        <p>
+          我不训模型。我做的是把模型放进真实研发流程里：定义验收标准、搭判定流水线、
+          编排多个 Agent、处理幻觉带来的交付风险。
+        </p>
+      </div>
+      <div class="about-side">
+        <h4>能力</h4>
+        <ul class="plain">
+          <li>质量体系 · 评测基线 · 发版门禁</li>
+          <li>AI 项目 0→1 · 人机分工设计</li>
+          <li>工具化 · 脚本 · 自动化编排</li>
+          <li>跨职能交付 · 外包与预算</li>
+        </ul>
+        <h4>联系</h4>
+        <ul class="plain">
+          <li><a href="mailto:liuyuhang.dylan@gmail.com">liuyuhang.dylan@gmail.com</a></li>
+          <li><a href="https://github.com/liuyuhang-dev">github.com/liuyuhang-dev</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 刘禹杭 · 本页内容均为个人方法论与脱敏后的设计描述，不含任何雇主的源代码、需求文档或用户数据。</p>
+</footer>
+
+</body>
+</html>

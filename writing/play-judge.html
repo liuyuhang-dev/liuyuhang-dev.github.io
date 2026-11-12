@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 测试的「玩判分离」：为什么不能让同一个 AI 既玩游戏又判对错 · 刘禹杭</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="../index.html">刘禹杭<span class="dot">·</span><span class="brand-sub">AI 质量与交付</span></a>
+  <nav>
+    <a href="../index.html#work">作品</a>
+    <a href="../index.html#method">方法</a>
+    <a href="../index.html#writing">文章</a>
+    <a href="../index.html#about">关于</a>
+  </nav>
+</header>
+<main>
+<article class="article">
+<a class="back" href="../index.html#writing">← 返回</a>
+<h1>AI 测试的「玩判分离」：为什么不能让同一个 AI 既玩游戏又判对错</h1>
+<p class="meta">2026 · 刘禹杭 · AI 辅助成文</p>
+<blockquote>
+<p>把大模型放进测试链路时，最容易犯的错不是模型不够强，而是<strong>让执行的人和判定的人是同一个</strong>。
+这篇文章讲我们在一款 canvas 游戏上踩过的坑，以及最后固化成三条规矩的过程。</p>
+</blockquote>
+<h2>一、一个具体的失败</h2>
+<p>我们做的是小游戏（微信/抖音宿主里跑的那种）。想上自动化，第一反应是"让 AI 看截图，判断对不对"。</p>
+<p>于是有了一个看起来很聪明的方案：</p>
+<pre><code>AI 打开游戏 → 看到画面 → 自己决定点哪 → 点完再看画面 → 判断是否正常
+</code></pre>
+<p>跑了两周，报告全是绿的。</p>
+<p>但线上还是漏。复盘时发现一个致命问题：<strong>AI 看到的"正常"，是它自己操作出来的正常。</strong></p>
+<p>举个例子。某个界面的金币数应该在结算后从 100 变成 150。AI 点完结算，看到显示 150，判定通过。但如果这个功能本来就有 bug——比如它压根没扣购买消耗——AI 也会觉得"显示合理"，因为它不知道<strong>期望</strong>应该是多少，它只知道<strong>现在</strong>是多少。</p>
+<p>这就是"自己出题自己判卷"。它不会报错，它会把 bug 固化成预期。</p>
+<h2>二、为什么 canvas 游戏特别难</h2>
+<p>常规 Web 自动化靠 DOM：找元素、点按钮、读文本。canvas 游戏把这些全画在了一张画布上：</p>
+<table>
+<thead>
+<tr>
+<th>常规 Web</th>
+<th>canvas 游戏</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DOM 树可查询</td>
+<td>只有一个 <code>&lt;canvas&gt;</code></td>
+</tr>
+<tr>
+<td>元素可定位</td>
+<td>只能靠坐标</td>
+</tr>
+<tr>
+<td>文本可读取</td>
+<td>文本是像素</td>
+</tr>
+<tr>
+<td>可访问性树</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>事件可合成</td>
+<td>需要真触摸/鼠标</td>
+</tr>
+</tbody>
+</table>
+<p>三条看似可行的路，都有硬伤：</p>
+<ol>
+<li><strong>纯人工</strong>：一个版本全量回归 1–2 人天，且越到后期越没人愿意做。</li>
+<li><strong>纯视觉 AI 自判</strong>：就是上面那个失败。</li>
+<li><strong>注入 JS 强行读状态</strong>：能读，但读的是"被测试代码自己算出来的值"。如果这段逻辑错了，注入读到的也是错的——<strong>用被测系统证明被测系统</strong>。</li>
+</ol>
+<p>所以真正的问题不是"怎么自动点"，而是：<strong>判定依据从哪来？</strong></p>
+<h2>三、三条规矩</h2>
+<p>我们把这个问题拆成三句话，后来成了所有测试设计的硬约束。</p>
+<h3>规矩一：玩与判分离</h3>
+<p>执行的主体和判定的主体不能是同一个。</p>
+<ul>
+<li>玩的可以是脚本、可以是 AI、可以是人；</li>
+<li>判的必须是<strong>另一套依据</strong>：需求文档、不变量、配置表、或者两个独立数据源的交叉。</li>
+</ul>
+<p>一旦合并，判定就失去独立性。这不是 AI 特有的问题——人工测试里"我自己写的用例我自己跑自己判"同样不可靠，只是 AI 让它变得更快、更隐蔽。</p>
+<h3>规矩二：期望不能来自观察</h3>
+<p>这是最反直觉的一条。</p>
+<p>看到一个数字显示 150，不能把 150 写成期望。期望只能来自四个地方：</p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求</td>
+<td>文档写了"购买后扣除 50 金币"</td>
+</tr>
+<tr>
+<td>不变量</td>
+<td>余额不得为负；背包不得有重复条目；重放不得双倍入账</td>
+</tr>
+<tr>
+<td>配置</td>
+<td>配置表里该道具价格是 50</td>
+</tr>
+<tr>
+<td>源间一致性</td>
+<td>配置表价格 × 运行时扣款 = 实际扣款；埋点定义 × 事件流</td>
+</tr>
+</tbody>
+</table>
+<p><strong>指不回这四个来源的期望，不许写。</strong></p>
+<p>这条规矩的代价是：很多"看起来能测"的东西测不了，因为没有依据。但收益是：<strong>报告里每一条通过都有出处</strong>。</p>
+<h3>规矩三：没有证据不许判通过</h3>
+<p>判定结果只有五种，没有"应该没问题"：</p>
+<pre><code>pass / fail / blocked / skipped / pending_*
+</code></pre>
+<ul>
+<li>能力没到位 → <code>blocked</code>（比如状态上报通道还没接）</li>
+<li>平台不支持 → <code>skipped</code>（比如 iOS 通道未验证）</li>
+<li>跑了但判不了 → <code>pending_judgment</code>，交给人</li>
+</ul>
+<p><strong>绝不允许把"没测"写成"通过"。</strong> 这条听起来是常识，但在实际项目里，"跳过"和"通过"混在一起是最常见的失真来源。</p>
+<h2>四、七阶段流水线</h2>
+<p>三条规矩落到工程上，是一条七阶段的链：</p>
+<pre><code>1. 体验理解    → 先像玩家一样玩一遍，知道正常长什么样
+2. 需求拆解    → 把需求拆成可判定的子句，每条子句至少一条用例
+3. 用例生成    → 派生可执行用例，带 req_refs 指回需求
+4. 断言转换    → 把期望转成判定项，标明判定模式
+5. 人工复核    → 唯一必须人工逐条过的关卡
+6. 真机执行    → 在真实设备上跑，留证据
+7. 判定与提 bug → 按 evidence 判，不许猜
+</code></pre>
+<p>关键在第 5 步：<strong>人工复核是唯一的用例关卡</strong>，没批准之前，执行一律 <code>blocked</code>。这不是不信任自动化，而是承认"什么该被测"本身需要判断。</p>
+<p>第 6 步强调<strong>真机</strong>。模拟器能覆盖大部分功能，但触摸手势、性能、热更、机型差异必须真机。代价是慢，所以用"按变更影响面选集"来控制时长。</p>
+<h2>五、三道闸门</h2>
+<p>流水线之外，还有三道强制校验，用脚本而不是靠自觉：</p>
+<table>
+<thead>
+<tr>
+<th>闸门</th>
+<th>检查什么</th>
+<th>不通过会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求覆盖</td>
+<td>每条需求子句是否至少有一条用例</td>
+<td>缺的列出来，不许进执行</td>
+</tr>
+<tr>
+<td>期望溯源</td>
+<td>每条期望是否能指回四个来源之一</td>
+<td>指不回的用例直接拒绝</td>
+</tr>
+<tr>
+<td>执行率</td>
+<td>实际执行数 / 计划数 ≥ 90%</td>
+<td>不到就不许放行</td>
+</tr>
+</tbody>
+</table>
+<p>第三条尤其重要。<strong>通过率是可以刷的</strong>：少跑几条难跑的，通过率自然好看。执行率刷不了——它直接暴露"有多少根本没跑"。</p>
+<h2>六、结果与边界</h2>
+<p>实际跑下来：</p>
+<ul>
+<li>8 条核心链路，7 条能自动跑通，单条 34–100 秒；</li>
+<li>失败能定位到具体环节（有一次定位到驱动器 shim 的坐标偏移）；</li>
+<li>结论可复现：同一份用例、同一个包，谁跑结果都一样。</li>
+</ul>
+<p>但更重要的是边界：</p>
+<ul>
+<li><strong>判不了的明确标人工</strong>，不假装覆盖；</li>
+<li><strong>能力缺失的显式 blocked</strong>，不伪装通过；</li>
+<li>报告在能力补齐前会显得"不够绿"——<strong>那是真实状态，不是流程失败</strong>。</li>
+</ul>
+<p>我们宁可要一份"30 条通过、20 条 blocked、5 条人工"的诚实报告，也不要一份"55 条全绿"的假报告。</p>
+<h2>七、这套东西怎么迁移到大模型评测</h2>
+<p>这三条规矩其实和游戏无关。放到 LLM 评测里同样成立：</p>
+<table>
+<thead>
+<tr>
+<th>这里的规矩</th>
+<th>对应到大模型评测</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>玩判分离</td>
+<td>生成回答的模型，不能同时当裁判模型</td>
+</tr>
+<tr>
+<td>期望不来自观察</td>
+<td>评测集的标准答案必须来自人工标注/权威来源，不能拿模型输出当 ground truth</td>
+</tr>
+<tr>
+<td>没证据不判通过</td>
+<td>无法判定的样本记为 abstain，不许计入准确率</td>
+</tr>
+<tr>
+<td>执行率 ≥ 90%</td>
+<td>报告必须披露实际评测样本数，不能只报准确率</td>
+</tr>
+<tr>
+<td>源间一致性</td>
+<td>同一事实在不同 prompt 下的答案要自洽</td>
+</tr>
+</tbody>
+</table>
+<p><strong>AI 越强，"谁来判"越贵。</strong> 生成变便宜之后，瓶颈从"做出来"移到了"证明它是对的"。</p>
+<h2>结语</h2>
+<p>如果只能记住一句话：</p>
+<blockquote>
+<p><strong>自动化测试的价值不在于跑得多快，而在于它的结论能不能被信任。</strong>
+一个会自己出题自己判卷的系统，跑得越快，错得越自信。</p>
+</blockquote>
+<p>三条规矩不复杂，难的是在每一次"这次就算了吧"的时候守住它。</p>
+<hr>
+<blockquote>
+<p><strong>成文说明</strong>：本文的观点、案例与判断来自本人实践；成文过程使用 AI 辅助（结构梳理与文字润色），并已由本人逐段核对。</p>
+</blockquote>
+</article>
+</main>
+<footer>
+  <p>© 2026 刘禹杭 · 本文为个人方法论总结，不含任何雇主的源代码、需求文档或用户数据。</p>
+</footer>
+</body>
+</html>
