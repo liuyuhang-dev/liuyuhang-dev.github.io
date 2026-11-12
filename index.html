@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>刘禹杭 · AI 质量与交付</title>
 <meta name="description" content="把 AI 生成的内容，变成可验收、可发布的产品。">
-<link rel="stylesheet" href="style.css?v=20261112b">
+<link rel="stylesheet" href="style.css?v=20261112c">
 </head>
 <body>
 
@@ -37,12 +37,13 @@
     </div>
 
     <figure class="hero-figure" aria-label="完备性矩阵示意">
-      <svg viewBox="0 0 400 215" role="img" aria-label="完备性矩阵：没有空格子">
+      <svg viewBox="0 0 400 120" role="img" aria-label="完备性矩阵：3 条子句乘 12 个维度">
         <g class="cells"></g>
       </svg>
       <figcaption>
-        <span class="fig-num">72 格</span>
-        <span>适用 41 · 不适用 31 · <strong>未判断 0</strong></span>
+        <span class="fig-num">36 格</span>
+        <span>适用 24 · 不适用 12 · <strong>未判断 0</strong></span>
+        <span class="fig-note">样例：3 条需求子句 × 12 个维度</span>
       </figcaption>
     </figure>
   </div>
@@ -57,7 +58,7 @@
     </div>
     <div class="stat">
       <span class="s-num">17</span>
-      <span class="s-lbl">类测试维度<br>含 5 类事故后补</span>
+      <span class="s-lbl">类测试维度<br>含项目补充的 5 类</span>
     </div>
     <div class="stat">
       <span class="s-num">18</span>
@@ -65,7 +66,7 @@
     </div>
     <div class="stat">
       <span class="s-num">290<span class="plus">+</span></span>
-      <span class="s-lbl">条版本用例<br>执行率 ≥ 90%</span>
+      <span class="s-lbl">条五人赛用例<br>版本门禁执行率 ≥ 90%</span>
     </div>
     <div class="stat">
       <span class="s-num">10</span>
@@ -318,15 +319,15 @@
 </div>
 
 <footer>
-  <p>© 2026 刘禹杭 · 本页内容为个人方法论与脱敏后的设计描述，不含任何雇主的源代码、需求文档或用户数据。</p>
+  <p>© 2026 刘禹杭 · 本页为个人方法论与脱敏后的设计描述，不含任何雇主的源代码、需求文档或用户数据。<br>页面数字均来自本人项目记录；测试维度与用例样例可在 <a href="https://github.com/liuyuhang-dev/career-os">career-os</a> 仓库中核对。</p>
 </footer>
 
 <script>
 (function(){
   var g = document.querySelector('.cells');
   if(!g) return;
-  var cols=12, rows=6, s=24, gap=5, ox=18, oy=12;
-  var na = new Set([3,9,14,19,25,32,37,41,48,55,60,66]);
+  var cols=12, rows=3, s=26, gap=5, ox=16, oy=10;
+  var na = new Set([2,5,9,11,14,17,20,23,27,30,33,35]);
   for(var i=0;i<cols*rows;i++){
     var c=i%cols, r=Math.floor(i/cols);
     var rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
