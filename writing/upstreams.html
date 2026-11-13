@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>测试的上游，不止需求文档 · 刘禹杭</title>
+<link rel="stylesheet" href="../style.css?v=20261112d">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="../index.html">刘禹杭<span class="dot">·</span><span class="brand-sub">AI 质量与交付</span></a>
+  <nav>
+    <a href="../index.html#work">作品</a>
+    <a href="../index.html#method">方法</a>
+    <a href="../index.html#writing">文章</a>
+    <a href="../index.html#about">关于</a>
+  </nav>
+</header>
+<main>
+<article class="article">
+<a class="back" href="../index.html#writing">← 返回</a>
+<h1>测试的上游，不止需求文档</h1>
+<p class="meta">2026 · 刘禹杭 · AI 辅助成文</p>
+<blockquote>
+<p>我们最初把"测试"定义为"跑起来看行为对不对"。
+这个定义没错，但它把测试的起点放在了三层里最贵的那一层。</p>
+</blockquote>
+<h2>一、只有一层的测试</h2>
+<p>大多数团队的测试是纯黑盒：装包、跑、看。</p>
+<p>这能做，但成本最高：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>验证什么</th>
+<th>需要什么</th>
+<th>成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 静态自洽</td>
+<td>描述产品的各个源彼此是否一致</td>
+<td>需求 / 配置 / 资源清单，<strong>不用运行</strong></td>
+<td>极低</td>
+</tr>
+<tr>
+<td>L2 实现一致</td>
+<td>代码是否按配置和需求实现</td>
+<td>源码</td>
+<td>中</td>
+</tr>
+<tr>
+<td>L3 运行时符合</td>
+<td>真机行为是否符合这些源</td>
+<td>设备 + 状态上报</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<p><strong>我们原来只有 L3。</strong></p>
+<p>而 L1 能发现的那类缺陷——漏配、错配、悬空引用、字段类型错误——用黑盒去发现，成本极高：你得精确构造某个运行时条件才能暴露。</p>
+<p><strong>静态检查是零运行成本。这是整条线上投入产出比最高的一段。</strong></p>
+<h2>二、上游有六种，不止需求</h2>
+<table>
+<thead>
+<tr>
+<th>源</th>
+<th>能提供什么</th>
+<th>可信度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求文档</td>
+<td>应然（客户意图）</td>
+<td>高，但常缺失或模糊</td>
+</tr>
+<tr>
+<td><strong>配置表</strong></td>
+<td>应然（策划意图）+ 具体数值</td>
+<td>高，但可能是从实现反推的</td>
+</tr>
+<tr>
+<td>构建配置</td>
+<td>应然（打包规则）</td>
+<td>高</td>
+</tr>
+<tr>
+<td>源码</td>
+<td><strong>覆盖目标</strong>（分支、边界、状态机）</td>
+<td><strong>不提供期望</strong></td>
+</tr>
+<tr>
+<td>运行时数据</td>
+<td>实然</td>
+<td>只能当实然</td>
+</tr>
+<tr>
+<td>观察所得的理解</td>
+<td>名词与地图</td>
+<td>不含期望</td>
+</tr>
+</tbody>
+</table>
+<p>注意第四行：源码是上游，但它回答的问题和别人不一样。后面单独说。</p>
+<h2>三、六对源，六类缺陷</h2>
+<p>真正有用的是<strong>两两交叉</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>源对</th>
+<th>能发现</th>
+<th>怎么检测</th>
+<th>层</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>配置 × 配置</strong></td>
+<td>表间悬空引用、同一条目两表冲突、字段缺失/类型错</td>
+<td>纯静态，全自动</td>
+<td>L1</td>
+</tr>
+<tr>
+<td>需求 × 配置</td>
+<td>需求要的功能没配、配置数值与需求不符</td>
+<td>语义比对，AI + 人复核</td>
+<td>L1</td>
+</tr>
+<tr>
+<td>需求 × 代码</td>
+<td>需求没实现、实现语义不同</td>
+<td>AI 定位代码</td>
+<td>L2</td>
+</tr>
+<tr>
+<td>配置 × 代码</td>
+<td>硬编码覆盖配置、读错字段、死配置、不可达组合</td>
+<td>AI 定位代码</td>
+<td>L2</td>
+</tr>
+<tr>
+<td>配置 × 运行时</td>
+<td>配置没生效、行为与配置不符</td>
+<td>真机 + 上报</td>
+<td>L3</td>
+</tr>
+<tr>
+<td>需求/配置 × 运行时</td>
+<td>功能缺失、行为错误</td>
+<td>真机</td>
+<td>L3</td>
+</tr>
+</tbody>
+</table>
+<h3>「配置 × 配置」应该做成第一道闸门</h3>
+<p>理由很硬：<strong>纯静态、可全自动、零设备依赖、不需要模型判断</strong>，而且发现的全是真缺陷。</p>
+<p>具体查七类：</p>
+<ol>
+<li><strong>悬空引用</strong>：道具表引用的图标不存在；关卡表引用的怪 id 不在怪物表；</li>
+<li><strong>主键重复</strong>：同 id 两行；</li>
+<li><strong>字段缺失/空值</strong>：必填列为空；</li>
+<li><strong>类型与范围</strong>：数值列出现非数字、负数、超范围；</li>
+<li><strong>枚举越界</strong>：类型字段的值不在合法枚举内；</li>
+<li><strong>表间一致性</strong>：两张表对同一实体描述不同（道具表说品质=3，品质表里没有 3）；</li>
+<li><strong>孤立行</strong>：配了但从没被引用（可能是废弃配置，也可能漏接）。</li>
+</ol>
+<p>这一类不该让模型看——它是确定性的，写成脚本跑，几秒钟的事。</p>
+<h2>四、必须写死的边界：代码只回答"测哪里"</h2>
+<p>这一条不写死，整个体系会退化成"用实现验证实现"。这是最隐蔽的坑。</p>
+<p>举例：</p>
+<pre><code>if kill &gt; 5 then reward = kill * 10
+</code></pre>
+<p>这段代码只意味着：</p>
+<blockquote>
+<p>「这里有个 &gt;5 的边界值得覆盖」</p>
+</blockquote>
+<p><strong>不意味着</strong>：</p>
+<blockquote>
+<p>「kill &gt; 5 时应该发 kill × 10」</p>
+</blockquote>
+<p>因为这段代码本身可能就是错的。</p>
+<p>所以规矩是：<strong>期望来源的枚举里，永远不能有 <code>code</code>。</strong> 校验器必须硬编码这条。</p>
+<p>这是"期望不能来自观察"在代码场景下的延伸——代码是<strong>实现</strong>，不是<strong>应然</strong>。</p>
+<h3>代码的合法用途</h3>
+<p>那代码能用来干什么？</p>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提取分支与边界</td>
+<td>等价类、边界值的<strong>测试点</strong></td>
+</tr>
+<tr>
+<td>提取状态机</td>
+<td>状态迁移的<strong>测试点</strong></td>
+</tr>
+<tr>
+<td>提取异常路径</td>
+<td>异常用例的<strong>测试点</strong></td>
+</tr>
+<tr>
+<td>提取硬编码常量</td>
+<td>与配置交叉的<strong>输入</strong></td>
+</tr>
+<tr>
+<td>找出配置空间里不可达的组合</td>
+<td>既省测试量，本身也可能是缺陷</td>
+</tr>
+</tbody>
+</table>
+<p><strong>全是"测哪里"，没有一条是"应该是什么"。</strong></p>
+<h2>五、期望只有四种来源</h2>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>标识</th>
+<th>要带什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求文档</td>
+<td><code>requirement</code></td>
+<td>需求编号</td>
+</tr>
+<tr>
+<td><strong>配置表</strong></td>
+<td><code>config</code></td>
+<td>表名 + 行</td>
+</tr>
+<tr>
+<td>通用不变量</td>
+<td><code>invariant</code></td>
+<td>——</td>
+</tr>
+<tr>
+<td><strong>源间一致性</strong></td>
+<td><code>consistency</code></td>
+<td>源对（A × B）</td>
+</tr>
+</tbody>
+</table>
+<p>禁止两种：<strong>源码实现</strong>、<strong>观察到的运行时行为</strong>。</p>
+<h3>为什么"配置"要单独成一类</h3>
+<p>有人会问：配置不就是需求的另一种写法吗，为什么不合进 <code>requirement</code>？</p>
+<p>三个理由：</p>
+<ol>
+<li><strong>可信度不同</strong>。配置可能是从有 bug 的实现反推出来的，需求是独立表达的。复核时要能分辨。</li>
+<li><strong>失效模式不同</strong>。配置改了，用例跟着改；需求改了，配置可能跟着改。影响面不一样。</li>
+<li><strong>复核问题不同</strong>。需求类要问"这是需求说的吗"；配置类要问"这条配置本身对吗、它和需求一致吗"。</li>
+</ol>
+<h2>六、新增一类用例：一致性用例</h2>
+<p>它不验证功能，它验证<strong>两个源描述同一件事时是否自洽</strong>。</p>
+<pre><code>用例：道具表引用的图标资源必须存在
+- 来源: consistency
+- 源对: configs/item.csv × assets/icons/
+- 检查: 每行 icon 字段都能在资源目录找到同名文件
+- 期望: 无悬空引用
+</code></pre>
+<p>这类大多能完全机械化，应该优先做成脚本，而不是写成用例文件。</p>
+<p>需要 AI 判断的是语义层：</p>
+<pre><code>用例：结算金币上限与需求一致
+- 源对: requirements/battle-reward.md (R-3.1) × configs/battle.csv (settle_coin_cap)
+- 期望: 需求写 500，配置也是 500
+</code></pre>
+<h2>七、一句总结</h2>
+<blockquote>
+<p>需求文档告诉你"要做什么"，
+配置表告诉你"具体是多少"，
+源码告诉你"该测哪里"，
+运行结果告诉你"实际是什么"。</p>
+<p><strong>只有前两个能给期望，后两个不能。</strong></p>
+</blockquote>
+<p>把这条守住，测试才不是"用实现证明实现"。</p>
+<hr>
+<p><em>本文整理自本人的测试框架文档，三层模型与交叉矩阵来自实际项目实践。</em></p>
+</article>
+</main>
+<footer>
+  <p>© 2026 刘禹杭 · 本文为个人方法论总结，不含任何雇主的源代码、需求文档或用户数据。</p>
+</footer>
+</body>
+</html>

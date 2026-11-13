@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>点两次按钮，测不出重复支付 · 刘禹杭</title>
+<link rel="stylesheet" href="../style.css?v=20261112d">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="../index.html">刘禹杭<span class="dot">·</span><span class="brand-sub">AI 质量与交付</span></a>
+  <nav>
+    <a href="../index.html#work">作品</a>
+    <a href="../index.html#method">方法</a>
+    <a href="../index.html#writing">文章</a>
+    <a href="../index.html#about">关于</a>
+  </nav>
+</header>
+<main>
+<article class="article">
+<a class="back" href="../index.html#writing">← 返回</a>
+<h1>点两次按钮，测不出重复支付</h1>
+<p class="meta">2026 · 刘禹杭 · AI 辅助成文</p>
+<blockquote>
+<p>这是测试里最容易被"看起来测过了"骗过去的一类缺陷。
+更糟的是，那种测法不仅没用，还会给团队一个假的安心。</p>
+</blockquote>
+<h2>一、大家是这么测的</h2>
+<p>需求里写「同一笔订单不能重复扣款」。测试怎么做？</p>
+<p>打开商城，点购买，<strong>快速点两次</strong>。看到只扣了一次钱，标记通过。</p>
+<p>这个动作看起来完全合理。它甚至经常真的能发现问题——在那些没做按钮防抖的早期版本里。</p>
+<p>但它测的<strong>不是</strong>重复支付。它测的是"按钮会不会被点两次"。</p>
+<h2>二、真实的重复支付长什么样</h2>
+<p>重复支付不是用户手快，是<strong>系统自己重试</strong>。真实的五种来源：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>响应丢失导致重试</td>
+<td>请求发出 → 服务端处理成功 → <strong>响应在回程丢了</strong> → 客户端超时 → 重发 → 服务端处理两次</td>
+</tr>
+<tr>
+<td>渠道回调重复投递</td>
+<td>支付渠道（微信/抖音）回调超时会重投，同一笔订单的回调被投递多次</td>
+</tr>
+<tr>
+<td>本地队列重放</td>
+<td>离线期间的待处理订单排队，恢复后重放，与之前的成功请求叠加</td>
+</tr>
+<tr>
+<td>进程被杀后重启</td>
+<td>未确认状态的订单在重启后被重新提交</td>
+</tr>
+<tr>
+<td>用户重复提交</td>
+<td>唯一一个黑盒真能撞到的，<strong>但它恰恰是最少见的</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>界面上往往完全正常。</strong> 重复发货表现为"道具多了"，还算看得见；而"扣了两次钱只发一次货"，客户端根本看不出来——要去查服务端账目。</p>
+<h2>三、为什么"点两次"是伪覆盖</h2>
+<p>三个原因，每一个都足以让它失效：</p>
+<ol>
+<li><strong>大多数客户端有按钮防抖或置灰</strong>，第二次点击压根没发出请求；</li>
+<li>即使发出了，走的是<strong>两次独立下单</strong>，不是"同一笔订单重复入账"——这两种错误的修复方式完全不同；</li>
+<li>它<strong>永远触发不了</strong>回调重投、响应丢失重试、队列重放这三种真实机制。</li>
+</ol>
+<p>所以结论是：</p>
+<blockquote>
+<p><strong>这种用例会给团队"重复支付已覆盖"的虚假信心。这比不测更糟。</strong></p>
+</blockquote>
+<p>不测，你知道这里有风险；假测，你以为没有。</p>
+<p>我们后来把这条写进了规则：用例如果以"连续点击 N 次"作为重复支付的验证手段，校验器直接报警，复核必须驳回。</p>
+<h2>四、那怎么测：三层，从最便宜的开始</h2>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>做什么</th>
+<th>能发现</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L2 静态</strong></td>
+<td>幂等防护<strong>缺失</strong>扫描</td>
+<td>缺幂等键、缺状态守卫、缺回调去重</td>
+<td>源码，不用运行</td>
+</tr>
+<tr>
+<td><strong>L3 运行时</strong></td>
+<td>精确时序故障注入 + 不变量判定</td>
+<td>防护写了但失效</td>
+<td>真机 + 状态上报</td>
+</tr>
+<tr>
+<td><strong>服务端</strong></td>
+<td>回调重投、重复入账对账</td>
+<td>服务端那一半</td>
+<td>服务端数据</td>
+</tr>
+</tbody>
+</table>
+<p>关键认识是：</p>
+<blockquote>
+<p><strong>重复支付的根因是"结构性缺失"——该有幂等的地方没写。</strong>
+所以最有效的检测不是跑测试，而是静态地找出这些缺失。</p>
+</blockquote>
+<p>这恰好是"代码作为上游"的合法用法：代码告诉你<strong>该测哪里</strong>，但不告诉你<strong>应该是什么</strong>。</p>
+<h3>静态扫什么：四类防护</h3>
+<p>先定位所有<strong>有不可逆副作用</strong>的入口（下单、发货、结算、存档、排行、领奖），然后逐个查：</p>
+<table>
+<thead>
+<tr>
+<th>防护</th>
+<th>检查什么</th>
+<th>缺了会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>幂等键</td>
+<td>请求带唯一订单号/请求 id 吗？服务端有唯一约束吗？</td>
+<td>同一请求被处理两次</td>
+</tr>
+<tr>
+<td>状态守卫</td>
+<td>状态流转有前置校验吗（只有"待支付"才能转"已支付"）</td>
+<td>已完成的订单被再次推进</td>
+</tr>
+<tr>
+<td>回调去重</td>
+<td>处理回调前先查"这笔处理过吗"</td>
+<td>渠道重投导致重复发货</td>
+</tr>
+<tr>
+<td>重放去重</td>
+<td>队列重放时检查该操作已成功吗</td>
+<td>离线队列与成功请求叠加</td>
+</tr>
+</tbody>
+</table>
+<p>产出不是"用例"，是两份清单：<strong>防护缺失清单</strong>（带文件名+行号）和<strong>覆盖地图</strong>（每一条边的失败/重试路径、可注入点）。</p>
+<p>每条都要能定位到行号供人抽查——因为 AI 读代码会声称"这里没有防护"而实际有，或者在别处有。<strong>产出必须标注"待验证"。</strong></p>
+<h3>运行时怎么注入</h3>
+<p>普通网络模拟太粗（只有延迟/丢包/断连），需要<strong>按动作定位</strong>的故障：</p>
+<ul>
+<li><code>drop_response</code>：请求发出后、响应到达前切断下行 → 模拟响应丢失</li>
+<li><code>kill_after_step</code>：某一步之后杀进程 → 模拟重启重放</li>
+<li><code>offline_during_step</code>：制造待处理队列</li>
+<li><code>replay_callback</code>：重投回调（<strong>客户端注入不了，需要服务端或代理</strong>）</li>
+</ul>
+<p>四种能测，一种测不了。<strong>测不了的那一条要写进报告，而不是假装覆盖了。</strong></p>
+<h2>五、判定靠什么：不变量，不是界面</h2>
+<p>重复支付在界面上不可见，所以判定必须靠状态上报 + 不变量：</p>
+<table>
+<thead>
+<tr>
+<th>不变量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同一订单只存在一条记录（按 orderId 唯一）</td>
+</tr>
+<tr>
+<td>同一订单只发货一次</td>
+</tr>
+<tr>
+<td>扣款次数 == 1</td>
+</tr>
+<tr>
+<td>道具/货币增量<strong>精确等于</strong>单次预期值</td>
+</tr>
+<tr>
+<td>订单状态单调不回退</td>
+</tr>
+<tr>
+<td>待处理队列最终清空</td>
+</tr>
+<tr>
+<td>回调处理计数与业务动作计数一致</td>
+</tr>
+</tbody>
+</table>
+<p>其中一条值得单独说：</p>
+<blockquote>
+<p><strong>「增量精确等于单次值」比「增量大于 0」强得多。</strong>
+后者对重复支付完全无感——发了两次货，增量是 2 倍，仍然大于 0。</p>
+</blockquote>
+<p>还有最后一条容易被忽略：<strong>回调收了两次、只发了一次货</strong>，业务上看起来"没多发货"，但账目已经错了。所以要对两个计数，而不是只看结果。</p>
+<h2>六、边界：哪些是真测不了的</h2>
+<table>
+<thead>
+<tr>
+<th>做不到</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务端回调重投的真机覆盖</td>
+<td>客户端注入不了回调</td>
+</tr>
+<tr>
+<td>服务端重复入账的确认</td>
+<td>客户端看不到服务端账目</td>
+</tr>
+<tr>
+<td>真实支付渠道端到端</td>
+<td>没有沙箱自动支付路径</td>
+</tr>
+<tr>
+<td>真并发竞态</td>
+<td>真机只有单客户端，造不出并发</td>
+</tr>
+<tr>
+<td>保证防护"绝对正确"</td>
+<td>静态扫描只能发现<strong>缺失</strong>，发现不了<strong>写错了</strong></td>
+</tr>
+</tbody>
+</table>
+<p>最后一条最要小心：<strong>静态扫描说"这里有幂等键"，不等于"这个幂等键有效"</strong>。所以 L2 和 L3 必须配合——静态找缺失，动态验有效。任何一层单独用都会漏。</p>
+<h2>七、真正的解法：把它前移到写代码的时候</h2>
+<p>既然根因是结构性缺失，那最有效的时点是<strong>写代码的时候</strong>，不是测试的时候。</p>
+<p>把上面那张四类防护检查表变成 <strong>MR 自检清单</strong>：</p>
+<ul>
+<li>这个入口有副作用吗？→ 有幂等键吗？</li>
+<li>涉及状态流转吗？→ 有前置状态守卫吗？</li>
+<li>接收外部回调吗？→ 有去重吗？</li>
+<li>有本地队列吗？→ 重放时检查已成功了吗？</li>
+</ul>
+<p>四个问题，比全量 code review 便宜得多，而且能部分自动化（模式匹配找有没有幂等键参数、有没有去重查询、有没有状态判断）。</p>
+<p>挂到 CI 上，合并前就报告"这个新增的副作用入口没有幂等防护"——<strong>这才是"避免"，而不是"测出来"。</strong></p>
+<hr>
+<h2>一句话</h2>
+<blockquote>
+<p>重复支付不是"点得快"造成的，是"重试时没人拦"造成的。
+你测点得快，永远测不到没人拦。</p>
+</blockquote>
+<hr>
+<p><em>本文整理自本人的测试框架文档，案例与规则均来自实际项目实践。</em></p>
+</article>
+</main>
+<footer>
+  <p>© 2026 刘禹杭 · 本文为个人方法论总结，不含任何雇主的源代码、需求文档或用户数据。</p>
+</footer>
+</body>
+</html>
